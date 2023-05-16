@@ -1,0 +1,6 @@
+THINGS TO REVISE FROM UNDERTAKING THE PROJECT
+
+static libraries
+Dynamic Libraries - lib files, headers, lib source
+make files - prevents having to manually punch in this compilation command every time. Build scripts that would automate the compilation process.
+
