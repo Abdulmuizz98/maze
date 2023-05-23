@@ -1,14 +1,15 @@
 #OBJS specifies which files to compile as part of the project
-OBJS = 01_hello_SDL.c
+#OBJS = 01_hello_SDL.c
+OBJS = maze.c
 
 
 #CC specifes which compiler we're using
-CC = gcc
+CC = gcc -std=gnu89
 
 #COMPILER_FLAGS specifies the additional compilation options we're using
 # -w suppresses all warnings
-COMPILER_FLAGS = -w
-
+#  -I where to find include files
+COMPILER_FLAGS = -w -I/usr/include/SDL2 -D_REENTRANT
 
 #LINKER_FLAGS specifies the libraries we're linking against
 LINKER_FLAGS = -lSDL2
