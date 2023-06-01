@@ -1,6 +1,5 @@
 #OBJS specifies which files to compile as part of the project
-#OBJS = 01_hello_SDL.c
-OBJS = maze.c
+OBJS = src/maze.c src/actions.c src/init.c
 
 
 #CC specifes which compiler we're using
@@ -9,13 +8,13 @@ CC = gcc -std=gnu89
 #COMPILER_FLAGS specifies the additional compilation options we're using
 # -w suppresses all warnings
 #  -I where to find include files
-COMPILER_FLAGS = -w -I/usr/include/SDL2 -D_REENTRANT
+COMPILER_FLAGS = -w -I/usr/include/SDL2 -Iinc  -D_REENTRANT
 
 #LINKER_FLAGS specifies the libraries we're linking against
-LINKER_FLAGS = -lSDL2
+LINKER_FLAGS = -lSDL2 
 
 #OBJ_NAME specifies the name of our executable
-OBJ_NAME = 01_hello_SDL
+OBJ_NAME = maze
 
 
 
