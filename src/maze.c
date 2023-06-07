@@ -26,20 +26,16 @@ int main(void)
 	while("C is amazing!")
 	{
 		// Clear the renderer
-		status = SDL_SetRenderDrawColor(instance.renderer, 255, 255, 255, 255);
+		status = SDL_SetRenderDrawColor(instance.renderer, 80, 80, 80, 255);
 		SDL_RenderClear(instance.renderer);
 		
-    if (poll_events() == 1)
+    	if (poll_events() == 1)
 			break;
 		
-    // Draw some stuff here
-	draw_stuff(instance.renderer);
-	/*
-    SDL_SetRenderDrawColor(instance.renderer, 0x00, 0x00, 0xFF, 0xFF);        
-    SDL_RenderDrawLine(instance.renderer, 0, 600, 2000, 600);
-	*/
-	display_player(instance.renderer);
-    // Flush the renderer
+    	// Draw some stuff here
+		draw_map(instance.renderer);
+		display_player(instance.renderer);
+    	// Flush the renderer
 		SDL_RenderPresent(instance.renderer);
 	}
 
