@@ -17,4 +17,5 @@ typedef struct SDL_Instance
 /**** DECLARATIONS ****/
 int init_instance(SDL_Instance *);
 
+
 #endif "_MAZE_H_"

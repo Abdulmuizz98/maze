@@ -5,5 +5,6 @@
 
 void draw_stuff(SDL_Renderer *);
 int poll_events(void);
+void display_player(SDL_Renderer *); 
 
 #endif "_ACTIONS_H_"
