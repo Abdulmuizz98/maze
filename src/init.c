@@ -1,5 +1,5 @@
 #include "maze.h"
-
+#include "globals.h"
 
 int init_instance(SDL_Instance *instance)
 {
@@ -30,5 +30,12 @@ int init_instance(SDL_Instance *instance)
         SDL_Quit();
         return (1);
     }
+
+	// Initalize the globals...
+	point_x = 300.00, point_y = 300.00;
+	point_angle = 0.00;
+	dpoint_x = cos(point_angle) * 5, dpoint_y = sin(point_angle) * 5;
+
+
     return (0);
 }

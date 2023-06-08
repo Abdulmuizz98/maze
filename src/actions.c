@@ -1,7 +1,11 @@
 #include "actions.h"
-
+#include <math.h>
+#define PI 3.14159265359
 
 float point_x = 300.00, point_y = 300.00;
+float point_angle;
+float dpoint_x = cos(0.00) * 5, dpoint_y = sin(0.00) * 5;
+
 int KEY_A = 4, KEY_D = 7, KEY_W = 26, KEY_S = 22;
 int map_Xgrids = 8, map_Ygrids = 8, map_size = 64;
 
@@ -88,22 +92,34 @@ int poll_events()
 					return (1);
 				else if (key.keysym.scancode == KEY_A)
 				{
-					point_x -= 5;
+					point_angle -= 0.1;
+					if (point_angle < 0)
+						point_angle += 2 * PI;
+					
+					dpoint_x = cos(point_angle) * 5;
+					dpoint_y = sin(point_angle) * 5;
 					//printf("%f\n", point_x);
 				}
 				else if (key.keysym.scancode == KEY_D)
 				{
-					point_x += 5;
+					point_angle += 0.1;
+					if (point_angle > PI * 2)
+						point_angle -= 2 * PI;
+					
+					dpoint_x = cos(point_angle) * 5;
+					dpoint_y = sin(point_angle) * 5;
 					//printf("%f\n", point_x);
 				}
 				else if (key.keysym.scancode == KEY_W)
 				{
-					point_y -= 5;
+					point_y += dpoint_y;
+					point_x += dpoint_x;
 					//printf("%f\n", point_y);
 				}
 				else if (key.keysym.scancode == KEY_S)
 				{
-					point_y += 5;
+					point_y -= dpoint_y;
+					point_x -= dpoint_x;
 					//printf("%f\n", point_y);
 				}
 				break;

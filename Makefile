@@ -11,7 +11,7 @@ CC = gcc -std=gnu89
 COMPILER_FLAGS = -w -I/usr/include/SDL2 -Iinc  -D_REENTRANT
 
 #LINKER_FLAGS specifies the libraries we're linking against
-LINKER_FLAGS = -lSDL2 
+LINKER_FLAGS = -lSDL2  -lm
 
 #OBJ_NAME specifies the name of our executable
 OBJ_NAME = maze
