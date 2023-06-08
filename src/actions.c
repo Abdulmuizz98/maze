@@ -1,11 +1,7 @@
+#include "maze.h"
 #include "actions.h"
-#include <math.h>
-#define PI 3.14159265359
 
-float point_x = 300.00, point_y = 300.00;
-float point_angle;
-float dpoint_x = cos(0.00) * 5, dpoint_y = sin(0.00) * 5;
-
+float point_x, point_y, point_angle, dpoint_y, dpoint_x;
 int KEY_A = 4, KEY_D = 7, KEY_W = 26, KEY_S = 22;
 int map_Xgrids = 8, map_Ygrids = 8, map_size = 64;
 
@@ -62,15 +58,9 @@ void draw_stuff(SDL_Renderer *rend)
 
 void display_player(SDL_Renderer *rend)
 {
-  	/*
-	SDL_SetRenderDrawColor(rend, 0, 0xff, 0, 0xff);
-	SDL_RenderDrawPoint(rend, point_x, point_y);
-	*/
-
 	SDL_Rect fillRect = { point_x, point_y, 10, 10 };
     SDL_SetRenderDrawColor(rend, 0xff, 0, 0, 0xff);
     SDL_RenderFillRect(rend, &fillRect);
-
 }
 
 int poll_events()
@@ -127,3 +117,43 @@ int poll_events()
 	}
 	return (0);
 }
+
+int init_instance(SDL_Instance *instance)
+{
+
+    // Initialize SDL
+    if (SDL_Init(SDL_INIT_VIDEO) < 0)
+    {
+        fprintf(stderr, "Cannot initialize SDL: %s\n", SDL_GetError());
+        return (1);
+    }
+
+    // Create a new Window instance
+    instance->window = SDL_CreateWindow("SDL2 \\o/", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 600, 600, 0);
+    if (instance->window == NULL)
+    {
+        fprintf(stderr, "Cannot create window: %s\n", SDL_GetError());
+        SDL_Quit();
+        return (1);
+    }
+
+    // Create a new Renderer instance linked to the window
+    instance->renderer = SDL_CreateRenderer(instance->window, -1,
+        SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    if (instance->renderer == NULL)
+    {
+        SDL_DestroyWindow(instance->window);
+        fprintf(stderr, "Cannot create renderer: %s\n", SDL_GetError());
+        SDL_Quit();
+        return (1);
+    }
+
+    // Initalize the globals...
+    point_x = 300.00, point_y = 300.00;
+    point_angle = 0.00;
+    dpoint_x = cos(point_angle) * 5, dpoint_y = sin(point_angle) * 5;
+
+
+    return (0);
+}
+

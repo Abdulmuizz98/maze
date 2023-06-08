@@ -1,5 +1,4 @@
 #include "maze.h"
-#include "actions.h"
 
 
 int main(void)
@@ -8,7 +7,6 @@ int main(void)
 	int status;
 
 	status = init_instance(&instance);
-	//status = init();
 	
 	printf("%d\n", status);
 	//status = SDL_SetRenderDrawColor(instance.renderer, 255, 255, 0 , 100);

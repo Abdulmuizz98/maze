@@ -1,5 +1,5 @@
 #OBJS specifies which files to compile as part of the project
-OBJS = src/maze.c src/actions.c src/init.c
+OBJS = src/maze.c src/actions.c
 
 
 #CC specifes which compiler we're using
