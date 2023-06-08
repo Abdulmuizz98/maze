@@ -1,5 +1,5 @@
 /**
- *	This header file defines application wide globals.
+ *	This header declares application wide globals.
  *
  */
 
@@ -19,6 +19,14 @@
 
 
 /********** STRUCTURES **********/
+/**
+ * struct SDL_Instance - Data structure that holds SDL window and renderer.
+ * @window: pointer to SDL_Window to initialize.
+ * @renderer: pointer to the SDL_Renderer to attach to the window. 
+ *
+ * Description: Wholesome data structure to hold a window and its
+ * associated renderer.
+ */
 typedef struct SDL_Instance
 {
 	SDL_Window *window;

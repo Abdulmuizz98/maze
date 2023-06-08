@@ -16,6 +16,13 @@ int map[] = {
 	1, 1, 1, 1, 1, 1, 1, 1,
 };
 
+
+/**
+ * draw_map - renders the game map.
+ * @rend: the pointer to renderer that renders the map.
+ *
+ * Return: Nothing;
+ */
 void draw_map(SDL_Renderer *rend)
 {
 	int x, y, sized_x, sized_y, index;
@@ -50,12 +57,25 @@ void draw_map(SDL_Renderer *rend)
 }
 
 
+/**
+ * draw_stuff - test something is rendered..
+ * @rend: the pointer to renderer that renders the map.
+ *
+ * Return: Nothing;
+ */
 void draw_stuff(SDL_Renderer *rend)
 { 
   	SDL_SetRenderDrawColor(rend, 0xff, 0, 0, 0xff);
 	SDL_RenderDrawLine(rend, 200, 300, 1000, 300);
 }
 
+
+/**
+ * display_player - renders the player on the map using position.
+ * @rend: the pointer to renderer that renders the map.
+ * 
+ * Return: Nothing;
+ */
 void display_player(SDL_Renderer *rend)
 {
 	SDL_Rect fillRect = { point_x, point_y, 10, 10 };
@@ -63,6 +83,13 @@ void display_player(SDL_Renderer *rend)
     SDL_RenderFillRect(rend, &fillRect);
 }
 
+
+/**
+ * poll_events - function that loops through player events and handles them.
+ *
+ * Return: 1 when player quits or presses ESC,
+ * 0 when no further events.;
+ */
 int poll_events()
 {
 	SDL_Event event;
@@ -118,6 +145,14 @@ int poll_events()
 	return (0);
 }
 
+
+/**
+ * init_instance - initialize SDL, a window and attaches renderer.
+ * @instance: the pointer to data structure holding window and renderer.
+ *
+ * Return: 1 if it fails,
+ * 0 if successful;
+ */
 int init_instance(SDL_Instance *instance)
 {
 
@@ -153,7 +188,5 @@ int init_instance(SDL_Instance *instance)
     point_angle = 0.00;
     dpoint_x = cos(point_angle) * 5, dpoint_y = sin(point_angle) * 5;
 
-
     return (0);
 }
-

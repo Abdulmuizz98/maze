@@ -1,13 +1,20 @@
 #include "maze.h"
 
 
+/**
+ * main - Entry point.
+ *
+ * Return: Nothing;
+ */
 int main(void)
 {
 	SDL_Instance instance;
 	int status;
 
 	status = init_instance(&instance);
-	
+	if (status == 1)
+		return (1);
+
 	printf("%d\n", status);
 	//status = SDL_SetRenderDrawColor(instance.renderer, 255, 255, 0 , 100);
 	if (instance.renderer == NULL)
