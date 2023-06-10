@@ -1,6 +1,7 @@
 #include "maze.h"
 #include "actions.h"
 
+
 float point_x, point_y, point_angle, dpoint_y, dpoint_x;
 int KEY_A = 4, KEY_D = 7, KEY_W = 26, KEY_S = 22;
 int map_Xgrids = 8, map_Ygrids = 8, map_size = 64;
@@ -79,8 +80,11 @@ void draw_stuff(SDL_Renderer *rend)
 void display_player(SDL_Renderer *rend)
 {
 	SDL_Rect fillRect = { point_x, point_y, 10, 10 };
-    SDL_SetRenderDrawColor(rend, 0xff, 0, 0, 0xff);
-    SDL_RenderFillRect(rend, &fillRect);
+  SDL_SetRenderDrawColor(rend, 0xff, 0, 0, 0xff);
+  SDL_RenderFillRect(rend, &fillRect);
+
+  //SDL_SetRenderDrawColor(rend, 0xff, 0xff,  0, 0xff);
+	SDL_RenderDrawLine(rend, point_x + 5, point_y + 5, (point_x + dpoint_x * 3) + 5, (point_y + dpoint_y * 3) + 5);
 }
 
 

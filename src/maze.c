@@ -35,13 +35,13 @@ int main(void)
 		status = SDL_SetRenderDrawColor(instance.renderer, 80, 80, 80, 255);
 		SDL_RenderClear(instance.renderer);
 		
-    	if (poll_events() == 1)
-			break;
+    if (poll_events() == 1)
+      break;
 		
-    	// Draw some stuff here
+    // Draw some stuff here
 		draw_map(instance.renderer);
 		display_player(instance.renderer);
-    	// Flush the renderer
+    // Flush the renderer
 		SDL_RenderPresent(instance.renderer);
 	}
 
