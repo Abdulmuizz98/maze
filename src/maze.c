@@ -29,8 +29,12 @@ int main(void)
 	 * This is an infinite loop.
 	 * Each loop represents a frame.
  	 */
-	while("C is amazing!")
-	{
+  //int multiple = 1;
+  while("C is amazing!")
+	//while (multiple < 16 * 4)
+  {
+    
+    //point_angle = 0.1 * multiple;
 		// Clear the renderer
 		status = SDL_SetRenderDrawColor(instance.renderer, 80, 80, 80, 255);
 		SDL_RenderClear(instance.renderer);
@@ -41,8 +45,10 @@ int main(void)
     // Draw some stuff here
 		draw_map(instance.renderer);
 		display_player(instance.renderer);
+    draw_rays(instance.renderer);
     // Flush the renderer
 		SDL_RenderPresent(instance.renderer);
+   // multiple++;
 	}
 
 	SDL_DestroyRenderer(instance.renderer);
