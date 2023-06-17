@@ -1,0 +1,325 @@
+#include "maze.h"
+#include "actions.h"
+#include "helpers.h"
+
+Point player_point;
+float point_angle;
+int KEY_A = 4, KEY_D = 7, KEY_W = 26, KEY_S = 22;
+int map_Xgrids = 8, map_Ygrids = 8, map_size = 64;
+
+int map[] = {
+	1, 1, 1, 1, 1, 1, 1, 1,
+	1, 0, 0, 1, 0, 0, 0, 1,
+	1, 0, 0, 1, 0, 0, 0, 1,
+	1, 0, 0, 1, 0, 0, 0, 1,
+	1, 0, 0, 0, 0, 0, 0, 1,
+	1, 0, 0, 0, 0, 1, 0, 1,
+	1, 0, 0, 0, 0, 0, 0, 1,
+	1, 1, 1, 1, 1, 1, 1, 1,
+};
+
+
+/**
+ * draw_map - renders the game map.
+ * @rend: the pointer to renderer that renders the map.
+ *
+ * Return: Nothing;
+ */
+void draw_map(SDL_Renderer *rend)
+{
+	int x, y, sized_x, sized_y, index;
+	SDL_Rect fillRect;
+
+	// The size (width and height) of each grid will always be thesame
+	fillRect.w = fillRect.h = map_size - 1;
+	
+	for (y = 0; y < map_Ygrids; y++)
+	{
+		for (x = 0; x < map_Xgrids; x++)
+		{
+			index = y * map_Xgrids + x;
+
+			// Set Rendering color for walls or space 
+			if (map[index] == 1)
+				SDL_SetRenderDrawColor(rend, 0xff, 0xff, 0xff, 0xff);
+			else 
+				SDL_SetRenderDrawColor(rend, 0, 0, 0, 0xff);
+			
+			// Scale grid indexes to size
+			sized_x = x * map_size;
+			sized_y = y * map_size;
+
+			// Display grid as a filled rectangle
+			fillRect.x = sized_x;
+			fillRect.y = sized_y;
+    		
+			SDL_RenderFillRect(rend, &fillRect);
+		}
+	}
+}
+
+
+/**
+ * draw_rays - casts the rays as lines..
+ * @rend: the pointer to renderer that renders the ray lines.
+ *
+ * Return: Nothing;
+ */
+void draw_rays(SDL_Renderer *rend)
+{ 
+  int casted_grids, rays;
+  int map_rx, map_ry, main_side, other_side; // Designates on-map equivalents for ray_x, ray_y;
+  
+  Point temp_point, ray_point;
+  float ray_angle, distance;
+  
+  for (rays = 0; rays < 1; rays++)
+  {
+    float aTan; // holds tan and Reciprocal of tan for verical and horizontal casts resp.
+    ray_angle = point_angle;
+
+    // horizontal
+
+    aTan = 1/ tan(ray_angle);
+    casted_grids = 0;
+
+    if (ray_angle == 0 || ray_angle == PI) // Facing Eastwards/ westwards
+    {
+      temp_point.y = player_point.y;
+      temp_point.x = player_point.x;
+      casted_grids = 8;
+    }
+    else if (ray_angle > PI) // Facing Northwwards
+    {
+      temp_point.y = (((int)player_point.y >> 6) << 6);
+      temp_point.x = aTan * (temp_point.y - player_point.y) + player_point.x; // Some trigonometry
+    
+      // hold constant horizontal and vertical offsets for further gridlines
+      temp_point.dy = -64;
+      temp_point.dx = (aTan * temp_point.dy);
+    }
+    else // Facing Southwards
+    {
+      temp_point.y = (((int)player_point.y >> 6) + 1) << 6 ;
+      temp_point.x = aTan * (temp_point.y - player_point.y) + player_point.x; // Some trigonometry
+    
+      // hold constant horizontal and vertical offsets for further gridlines
+      temp_point.dy = 64;
+      temp_point.dx = (aTan * temp_point.dy);
+ 
+    }
+    
+    
+    while(casted_grids < 8)
+    {
+      map_rx = (int) temp_point.x >> 6;
+      map_ry = (int) temp_point.y >> 6;
+
+      main_side = map_ry * map_Xgrids + map_rx;
+      other_side = main_side - 8;
+
+      if (main_side < map_Xgrids * map_Ygrids && (map[main_side] == 1 || map[other_side] == 1) ) // Touches wall
+      {
+        casted_grids = 8;
+      }
+      else // Next grid
+      {
+        casted_grids++;
+        temp_point.x += temp_point.dx;
+        temp_point.y += temp_point.dy;
+      }
+    }
+    
+    // Temporarily save horizontal values... we're not yet sure it's shortest. 
+    distance = linear_distance(player_point.x, player_point.y, temp_point.x, temp_point.y);
+    ray_point.x = temp_point.x;
+    ray_point.y = temp_point.y;
+
+    // Vertical Walls
+
+    aTan = tan(ray_angle);
+    casted_grids = 0;
+
+    if (ray_angle == PI/2  || ray_angle == 3 * PI / 2) // Facing Northwards/ Southwards
+    { 
+      temp_point.y = player_point.y;
+      temp_point.x = player_point.x;
+      casted_grids = 8;
+    }
+    else if (ray_angle > PI/ 2 && ray_angle < 3 * PI / 2) // Facing Westwards
+    {
+      temp_point.x = (((int)player_point.x >> 6) << 6);
+      temp_point.y = aTan * (temp_point.x - player_point.x) + player_point.y; // Some trigonometry
+    
+      // hold constant horizontal and vertical offsets for further gridlines
+      temp_point.dx = -64;
+      temp_point.dy = (aTan * temp_point.dx);
+    }
+    else // Facing Eastwards
+    {
+      temp_point.x = (((int)player_point.x >> 6) + 1) << 6 ;
+      temp_point.y = aTan * (temp_point.x - player_point.x) + player_point.y; // Some trigonometry
+    
+      // hold constant horizontal and vertical offsets for further gridlines
+      temp_point.dx = 64;
+      temp_point.dy = (aTan * temp_point.dx);
+ 
+    }
+  
+
+    while(casted_grids < 8)
+    {
+      map_rx = (int) temp_point.x >> 6;
+      map_ry = (int) temp_point.y >> 6;
+
+      // Indices of first side of wall and other side of the wall on the map
+      main_side = map_ry * map_Xgrids + map_rx;
+      other_side = main_side - 1;
+
+
+      if (main_side < map_Xgrids * map_Ygrids && (map[main_side] == 1 || map[other_side] == 1)) // Touches wall
+      {
+        casted_grids = 8;
+      }
+      else // Next grid
+      {
+        casted_grids++;
+        temp_point.x += temp_point.dx;
+        temp_point.y += temp_point.dy;
+      }
+    }
+
+    // Take the shortest point as the ray points
+    if (distance > linear_distance(player_point.x, player_point.y, temp_point.x, temp_point.y))
+    {
+      // Overwrite temporarily stored horizontal points if vertical is shorter.
+      ray_point.x = temp_point.x;
+      ray_point.y = temp_point.y;
+    } 
+ 
+    //printf("Angle: %f, Ray Points: x: %f, y: %f, Position: x: %f, y: %f\n", ray_angle,temp_x, temp_y, point_x, point_y);
+    SDL_SetRenderDrawColor(rend, 0xff, 0, 0, 0xff);
+	  SDL_RenderDrawLine(rend, player_point.x, player_point.y, ray_point.x, ray_point.y);
+  }
+}
+
+
+/**
+ * display_player - renders the player on the map using position.
+ * @rend: the pointer to renderer that renders the player.
+ * 
+ * Return: Nothing;
+ */
+void display_player(SDL_Renderer *rend)
+{
+	SDL_Rect fillRect = { player_point.x - 5, player_point.y - 5, 10, 10 };
+  SDL_SetRenderDrawColor(rend, 0xff, 0, 0, 0xff);
+  SDL_RenderFillRect(rend, &fillRect);
+
+  // Direction pointer
+	SDL_RenderDrawLine(rend, player_point.x, player_point.y, (player_point.x + player_point.dx * 3), (player_point.y + player_point.dy * 3));
+}
+
+
+/**
+ * poll_events - function that loops through player events and handles them.
+ *
+ * Return: 1 when player quits or presses ESC,
+ * 0 when no further events.;
+ */
+int poll_events()
+{
+	SDL_Event event;
+	SDL_KeyboardEvent key;
+
+	while (SDL_PollEvent(&event))
+	{
+		switch(event.type)
+		{
+			case SDL_QUIT:
+				return (1);
+			case SDL_KEYDOWN:
+				key = event.key;
+				//printf("You pressed key: %d\n", key.keysym.scancode);
+				/* If "ESC" is pressed */
+				if (key.keysym.scancode == 0x29)
+					return (1);
+				else if (key.keysym.scancode == KEY_A)
+				{
+					point_angle -= 0.1;
+					if (point_angle < 0)
+						point_angle += 2 * PI;
+					
+					player_point.dx = cos(point_angle) * 5;
+					player_point.dy = sin(point_angle) * 5;
+				}
+				else if (key.keysym.scancode == KEY_D)
+				{
+					point_angle += 0.1;
+					if (point_angle > PI * 2)
+						point_angle -= 2 * PI;
+					
+					player_point.dx = cos(point_angle) * 5;
+					player_point.dy = sin(point_angle) * 5;
+				}
+				else if (key.keysym.scancode == KEY_W)
+				{
+					player_point.y += player_point.dy;
+					player_point.x += player_point.dx;
+				}
+				else if (key.keysym.scancode == KEY_S)
+				{
+					player_point.y -= player_point.dy;
+					player_point.x -= player_point.dx;
+				}
+				break;
+		}
+	}
+	return (0);
+}
+
+
+/**
+ * init_instance - initialize SDL, a window and attaches renderer.
+ * @instance: the pointer to data structure holding window and renderer.
+ *
+ * Return: 1 if it fails,
+ * 0 if successful;
+ */
+int init_instance(SDL_Instance *instance)
+{
+
+    // Initialize SDL
+    if (SDL_Init(SDL_INIT_VIDEO) < 0)
+    {
+        fprintf(stderr, "Cannot initialize SDL: %s\n", SDL_GetError());
+        return (1);
+    }
+
+    // Create a new Window instance
+    instance->window = SDL_CreateWindow("SDL2 \\o/", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 600, 600, 0);
+    if (instance->window == NULL)
+    {
+        fprintf(stderr, "Cannot create window: %s\n", SDL_GetError());
+        SDL_Quit();
+        return (1);
+    }
+
+    // Create a new Renderer instance linked to the window
+    instance->renderer = SDL_CreateRenderer(instance->window, -1,
+        SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    if (instance->renderer == NULL)
+    {
+        SDL_DestroyWindow(instance->window);
+        fprintf(stderr, "Cannot create renderer: %s\n", SDL_GetError());
+        SDL_Quit();
+        return (1);
+    }
+
+    // Initalize the globals...
+    point_angle = 0.5001;
+    player_point.x = 64.00, player_point.y = 320.00;
+    player_point.dx = cos(point_angle) * 5, player_point.dy = sin(point_angle) * 5;
+
+    return (0);
+}

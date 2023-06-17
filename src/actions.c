@@ -1,8 +1,9 @@
 #include "maze.h"
 #include "actions.h"
+#include "draw_ray_helpers.h"
 
-
-float point_x, point_y, point_angle, dpoint_y, dpoint_x;
+Point player_point;
+float player_angle;
 int KEY_A = 4, KEY_D = 7, KEY_W = 26, KEY_S = 22;
 int map_Xgrids = 8, map_Ygrids = 8, map_size = 64;
 
@@ -60,80 +61,32 @@ void draw_map(SDL_Renderer *rend)
 
 /**
  * draw_rays - casts the rays as lines..
- * @rend: the pointer to renderer that renders the lines.
+ * @rend: the pointer to renderer that renders the ray lines.
  *
  * Return: Nothing;
  */
 void draw_rays(SDL_Renderer *rend)
 { 
-  int casted_grids;
-  int map_rx, map_ry, map_position; // Designates on-map equivalents for ray_x, ray_y;
-  float ray_x, ray_y, ray_angle, ray_x_offset, ray_y_offset;
+  int rays;
+  Point vertical_point, horizontal_point;
+  float distance;
   
-  /* 
-   * defines negative inverse of tangent...
-   * (mathfix for setting reference point
-   * of player to North instead of the default NorthEast)
-   * Also generates negative tan for raycasts towards the 
-   * left direction and positive tan for right direction.
-   */
-  float aTan;
+  for (rays = 0; rays < 1; rays++)
+  {
+    horizontal_point = horizontal_ray_point();
+    vertical_point = vertical_ray_point();
 
-  ray_angle = point_angle;
-  aTan = 1/ tan(ray_angle);
-  casted_grids = 0;
-
-  if (ray_angle == 0 || ray_angle == PI) // Facing Eastwards/ westwards
-  {
-    ray_y = point_y;
-    ray_x = point_x;
-    casted_grids = 8;
-  }
-  else if (ray_angle > PI) // Facing Northwwards
-  {
-    ray_y = (((int)point_y >> 6) << 6); // 0.0001 accounts for float imperfections
-    ray_x = aTan * (ray_y - point_y) + point_x; // Some trigonometry
-    
-    // hold constant horizontal and vertical offsets for further gridlines
-    ray_y_offset = -64;
-    ray_x_offset = (aTan * ray_y_offset);
-  }
-  else // Facing Southwards
-  {
-    ray_y = (((int)point_y >> 6) + 1) << 6 ;
-    ray_x = aTan * (ray_y - point_y) + point_x; // Some trigonometry
-    
-    // hold constant horizontal and vertical offsets for further gridlines
-    ray_y_offset = 64;
-    ray_x_offset = (aTan * ray_y_offset);
+    // Temporarily save horizontal ray distance... not yet sure it's the shortest.
+    distance = linear_distance(player_point.x, player_point.y, horizontal_point.x, horizontal_point.y);
  
+    SDL_SetRenderDrawColor(rend, 0xff, 0, 0, 0xff);
+    
+    // Take the shortest point as the ray points
+    if (distance > linear_distance(player_point.x, player_point.y, vertical_point.x, vertical_point.y))
+	    SDL_RenderDrawLine(rend, player_point.x, player_point.y, vertical_point.x, vertical_point.y);
+    else 
+	    SDL_RenderDrawLine(rend, player_point.x, player_point.y, horizontal_point.x, horizontal_point.y);
   }
-  
-  while(casted_grids < 2)
-  {
-    map_rx = (int) ray_x >> 6;
-    map_ry = (int) ray_y >> 6;
-
-    map_position = map_ry * map_Xgrids + map_rx;
-
-    if (map_position < map_Xgrids * map_Ygrids && map[map_position] == 1) // Touches wall
-    {
-      casted_grids = 8;
-    }
-    else // Next grid
-    {
-      casted_grids++;
-      ray_x += ray_x_offset;
-      ray_y += ray_y_offset;
-    }
-  }
-
-  /*
-  map_rx = (int) ray_x >> 6;
-  map_ry = (int) ray_y >> 6;
-*/
-  //printf("Angle: %f, Ray Points: x: %f, y: %f, Position: x: %f, y: %f\n", ray_angle,ray_x, ray_y, point_x, point_y);
-	SDL_RenderDrawLine(rend, point_x, point_y, ray_x, ray_y);
 }
 
 
@@ -145,13 +98,12 @@ void draw_rays(SDL_Renderer *rend)
  */
 void display_player(SDL_Renderer *rend)
 {
-	SDL_Rect fillRect = { point_x - 5, point_y - 5, 10, 10 };
+	SDL_Rect fillRect = { player_point.x - 5, player_point.y - 5, 10, 10 };
   SDL_SetRenderDrawColor(rend, 0xff, 0, 0, 0xff);
   SDL_RenderFillRect(rend, &fillRect);
 
-  //SDL_SetRenderDrawColor(rend, 0xff, 0xff,  0, 0xff);
-	SDL_RenderDrawLine(rend, point_x, point_y, (point_x + dpoint_x * 3), (point_y + dpoint_y * 3));
-	//SDL_RenderDrawLine(rend, point_x + 5, point_y + 5, (point_x + dpoint_x * 3) + 5, (point_y + dpoint_y * 3) + 5);
+  // Direction pointer
+	SDL_RenderDrawLine(rend, player_point.x, player_point.y, (player_point.x + player_point.dx * 3), (player_point.y + player_point.dy * 3));
 }
 
 
@@ -180,35 +132,31 @@ int poll_events()
 					return (1);
 				else if (key.keysym.scancode == KEY_A)
 				{
-					point_angle -= 0.1;
-					if (point_angle < 0)
-						point_angle += 2 * PI;
+					player_angle -= 0.1;
+					if (player_angle < 0)
+						player_angle += 2 * PI;
 					
-					dpoint_x = cos(point_angle) * 5;
-					dpoint_y = sin(point_angle) * 5;
-					//printf("%f\n", point_x);
+					player_point.dx = cos(player_angle) * 5;
+					player_point.dy = sin(player_angle) * 5;
 				}
 				else if (key.keysym.scancode == KEY_D)
 				{
-					point_angle += 0.1;
-					if (point_angle > PI * 2)
-						point_angle -= 2 * PI;
+					player_angle += 0.1;
+					if (player_angle > PI * 2)
+						player_angle -= 2 * PI;
 					
-					dpoint_x = cos(point_angle) * 5;
-					dpoint_y = sin(point_angle) * 5;
-					//printf("%f\n", point_x);
+					player_point.dx = cos(player_angle) * 5;
+					player_point.dy = sin(player_angle) * 5;
 				}
 				else if (key.keysym.scancode == KEY_W)
 				{
-					point_y += dpoint_y;
-					point_x += dpoint_x;
-					//printf("%f\n", point_y);
+					player_point.y += player_point.dy;
+					player_point.x += player_point.dx;
 				}
 				else if (key.keysym.scancode == KEY_S)
 				{
-					point_y -= dpoint_y;
-					point_x -= dpoint_x;
-					//printf("%f\n", point_y);
+					player_point.y -= player_point.dy;
+					player_point.x -= player_point.dx;
 				}
 				break;
 		}
@@ -226,7 +174,6 @@ int poll_events()
  */
 int init_instance(SDL_Instance *instance)
 {
-
     // Initialize SDL
     if (SDL_Init(SDL_INIT_VIDEO) < 0)
     {
@@ -255,9 +202,9 @@ int init_instance(SDL_Instance *instance)
     }
 
     // Initalize the globals...
-    point_x = 64.00, point_y = 320.00;
-    point_angle = 0.5;
-    dpoint_x = cos(point_angle) * 5, dpoint_y = sin(point_angle) * 5;
+    player_angle = 0.5001;
+    player_point.x = 64.00, player_point.y = 320.00;
+    player_point.dx = cos(player_angle) * 5, player_point.dy = sin(player_angle) * 5;
 
     return (0);
 }

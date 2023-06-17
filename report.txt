@@ -1,0 +1,69 @@
+Angle: 0.100000, Ray Points: x: 499.332886, y: 320.000000 
+Angle: 0.200000, Ray Points: x: 2365.329590, y: 384.000000 
+Angle: 0.300000, Ray Points: x: 364.654541, y: 320.000000 
+Angle: 0.400000, Ray Points: x: 347.304443, y: 320.000000 
+Angle: 0.500000, Ray Points: x: 336.609741, y: 320.000000 
+Angle: 0.600000, Ray Points: x: 329.233917, y: 320.000000 
+Angle: 0.700000, Ray Points: x: 323.744843, y: 320.000000 
+Angle: 0.800000, Ray Points: x: 629.653809, y: 384.000000 
+Angle: 0.900000, Ray Points: x: 566.530884, y: 384.000000 
+Angle: 1.000000, Ray Points: x: 513.715332, y: 384.000000 
+Angle: 1.100000, Ray Points: x: 468.050720, y: 384.000000 
+Angle: 1.200000, Ray Points: x: 427.432465, y: 384.000000 
+Angle: 1.300000, Ray Points: x: 390.378418, y: 384.000000 
+Angle: 1.400000, Ray Points: x: 355.787506, y: 384.000000 
+Angle: 1.500000, Ray Points: x: 322.793335, y: 384.000000 
+Angle: 1.600000, Ray Points: x: 290.669250, y: 384.000000 
+
+
+Angle: 1.700000, Ray Points: x: 258.760834, y: 384.000000 
+Angle: 1.800000, Ray Points: x: 226.431488, y: 384.000000 
+Angle: 1.900000, Ray Points: x: 193.010986, y: 384.000000 
+Angle: 2.000000, Ray Points: x: 157.738602, y: 384.000000 
+Angle: 2.100000, Ray Points: x: 119.689667, y: 384.000000 
+Angle: 2.200000, Ray Points: x: 77.669968, y: 384.000000 
+Angle: 2.300000, Ray Points: x: 30.051285, y: 384.000000 
+Angle: 2.400000, Ray Points: x: -25.504028, y: 384.000000 
+Angle: 2.500000, Ray Points: x: -92.527802, y: 384.000000 
+Angle: 2.600000, Ray Points: x: -176.656708, y: 384.000000 
+Angle: 2.700000, Ray Points: x: -287.425720, y: 384.000000 
+Angle: 2.800000, Ray Points: x: -441.839020, y: 384.000000 
+Angle: 2.900000, Ray Points: x: -669.268555, y: 384.000000 
+Angle: 3.000000, Ray Points: x: -960.605469, y: 384.000000 
+Angle: 3.100000, Ray Points: x: 4158.439453, y: 384.000000 
+Angle: 3.200000, Ray Points: x: -452.472412, y: 256.000000 
+
+
+Angle: 3.300000, Ray Points: x: 24.562225, y: 256.000000 
+Angle: 3.400000, Ray Points: x: -371.667786, y: 192.000000 
+Angle: 3.500000, Ray Points: x: -304.766541, y: 192.000000 
+Angle: 3.600000, Ray Points: x: -216.417694, y: 192.000000 
+Angle: 3.700000, Ray Points: x: -137.898849, y: 192.000000 
+Angle: 3.800000, Ray Points: x: -71.168747, y: 192.000000 
+Angle: 3.900000, Ray Points: x: -14.070648, y: 192.000000 
+Angle: 4.000000, Ray Points: x: 35.712585, y: 192.000000 
+Angle: 4.100000, Ray Points: x: 80.059662, y: 192.000000 
+Angle: 4.200000, Ray Points: x: 120.421967, y: 192.000000 
+Angle: 4.300000, Ray Points: x: 157.929749, y: 192.000000 
+Angle: 4.400000, Ray Points: x: 193.489990, y: 192.000000 
+Angle: 4.500000, Ray Points: x: 227.865463, y: 192.000000 
+Angle: 4.600000, Ray Points: x: 261.735046, y: 192.000000 
+Angle: 4.700000, Ray Points: x: 295.744659, y: 192.000000 
+Angle: 4.800000, Ray Points: x: 330.555054, y: 192.000000 
+
+
+Angle: 4.900000, Ray Points: x: 366.892029, y: 192.000000 
+Angle: 5.000000, Ray Points: x: 405.609894, y: 192.000000 
+Angle: 5.100000, Ray Points: x: 447.777039, y: 192.000000 
+Angle: 5.200000, Ray Points: x: 494.805847, y: 192.000000 
+Angle: 5.300000, Ray Points: x: 548.661316, y: 192.000000 
+Angle: 5.400000, Ray Points: x: 612.218262, y: 192.000000 
+Angle: 5.500000, Ray Points: x: 689.916992, y: 192.000000 
+Angle: 5.600000, Ray Points: x: 789.048462, y: 192.000000 
+Angle: 5.700000, Ray Points: x: 922.517334, y: 192.000000 
+Angle: 5.800000, Ray Points: x: 1115.495728, y: 192.000000 
+Angle: 5.900000, Ray Points: x: 1424.135498, y: 192.000000 
+Angle: 6.000000, Ray Points: x: 451.199524, y: 256.000000 
+Angle: 6.100000, Ray Points: x: 537.501038, y: 256.000000 
+Angle: 6.200000, Ray Points: x: 10755.020508, y: 192.000000 
+Angle: 6.300000, Ray Points: x: 135434.375000, y: 192.000000 
